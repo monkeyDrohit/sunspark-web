@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { StageTracker } from "@/components/stage-tracker";
 import { ApplicationActions } from "@/components/application-actions";
+import { DocumentVault } from "@/components/document-vault";
 
 function InfoRow({
   label,
@@ -129,6 +130,8 @@ export default async function ServiceLeadDetailPage({
           </CardContent>
         </Card>
       </div>
+
+      <DocumentVault serviceLeadId={lead.id} />
     </div>
   );
 }
