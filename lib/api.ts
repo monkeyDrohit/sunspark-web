@@ -1,3 +1,5 @@
+import { getAuthHeaders } from './api-helpers';
+
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
 
 export type StageSlug =
@@ -64,23 +66,7 @@ export interface ServiceLead {
 export async function fetchServiceLeads(vendorId?: string | null): Promise<ServiceLead[]> {
   const url = vendorId ? `${API_BASE}/service-leads?vendorId=${vendorId}` : `${API_BASE}/service-leads`;
   
-  // Get auth headers (works on both server and client)
-  const headers: HeadersInit = {};
-  if (typeof window === 'undefined') {
-    // Server-side: read from cookies
-    const { cookies } = await import('next/headers');
-    const cookieStore = await cookies();
-    const token = cookieStore.get('token')?.value;
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-  } else {
-    // Client-side: read from localStorage
-    const token = localStorage.getItem('token');
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-  }
+  const headers = await getAuthHeaders();
   
   const res = await fetch(url, { 
     cache: 'no-store',
@@ -92,11 +78,8 @@ export async function fetchServiceLeads(vendorId?: string | null): Promise<Servi
 }
 
 export async function fetchServiceLead(id: string): Promise<ServiceLead | null> {
-  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-  const headers: HeadersInit = {};
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
-  }
+  const headers = await getAuthHeaders();
+  
   const res = await fetch(`${API_BASE}/service-leads/${id}`, { 
     cache: 'no-store',
     credentials: 'include',
@@ -112,11 +95,15 @@ export async function updateServiceLeadStage(
   status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED',
   notes?: string
 ): Promise<ApplicationStage> {
+  const baseHeaders = await getAuthHeaders();
+  const headers = {
+    ...baseHeaders,
+    'Content-Type': 'application/json',
+  };
+  
   const res = await fetch(`${API_BASE}/service-leads/${serviceLeadId}/stages`, {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers,
     credentials: 'include',
     body: JSON.stringify({ stageSlug, status, notes }),
   });

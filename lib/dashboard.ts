@@ -1,3 +1,5 @@
+import { getAuthHeaders } from './api-helpers';
+
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
 
 export interface DashboardStats {
@@ -33,23 +35,7 @@ export interface DashboardStats {
 export async function fetchDashboardStats(vendorId?: string | null): Promise<DashboardStats> {
   const url = vendorId ? `${API_BASE}/dashboard/stats?vendorId=${vendorId}` : `${API_BASE}/dashboard/stats`;
   
-  // Get auth headers (works on both server and client)
-  const headers: HeadersInit = {};
-  if (typeof window === 'undefined') {
-    // Server-side: read from cookies
-    const { cookies } = await import('next/headers');
-    const cookieStore = await cookies();
-    const token = cookieStore.get('token')?.value;
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-  } else {
-    // Client-side: read from localStorage
-    const token = localStorage.getItem('token');
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-  }
+  const headers = await getAuthHeaders();
   
   const res = await fetch(url, { 
     cache: 'no-store',

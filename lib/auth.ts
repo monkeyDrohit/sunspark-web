@@ -1,3 +1,5 @@
+import { getAuthHeaders } from './api-helpers';
+
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
 
 export interface User {
@@ -51,11 +53,7 @@ export async function logout(): Promise<void> {
 
 export async function getCurrentUser(): Promise<User | null> {
   try {
-    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-    const headers: HeadersInit = { 'Content-Type': 'application/json' };
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
+    const headers = await getAuthHeaders();
 
     const res = await fetch(`${API_BASE}/auth/me`, {
       headers,
@@ -75,11 +73,11 @@ export async function getCurrentUser(): Promise<User | null> {
 }
 
 export async function updateProfile(data: { name?: string; phone?: string; password?: string }): Promise<User> {
-  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-  const headers: HeadersInit = { 'Content-Type': 'application/json' };
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
-  }
+  const baseHeaders = await getAuthHeaders();
+  const headers = {
+    ...baseHeaders,
+    'Content-Type': 'application/json',
+  };
 
   const res = await fetch(`${API_BASE}/auth/profile`, {
     method: 'PUT',
@@ -99,14 +97,10 @@ export async function updateProfile(data: { name?: string; phone?: string; passw
 
 export async function getServerUser(): Promise<User | null> {
   try {
-    const { cookies } = await import('next/headers');
-    const cookieStore = await cookies();
-    const token = cookieStore.get('token')?.value;
-    
-    if (!token) return null;
+    const headers = await getAuthHeaders();
     
     const res = await fetch(`${API_BASE}/auth/me`, {
-      headers: { 'Authorization': `Bearer ${token}` },
+      headers,
       cache: 'no-store',
     });
     

@@ -1,3 +1,5 @@
+import { getAuthHeaders } from './api-helpers';
+
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
 
 export interface Vendor {
@@ -11,23 +13,7 @@ export interface Vendor {
 }
 
 export async function fetchVendors(): Promise<Vendor[]> {
-  // Get auth headers (works on both server and client)
-  const headers: HeadersInit = {};
-  if (typeof window === 'undefined') {
-    // Server-side: read from cookies
-    const { cookies } = await import('next/headers');
-    const cookieStore = await cookies();
-    const token = cookieStore.get('token')?.value;
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-  } else {
-    // Client-side: read from localStorage
-    const token = localStorage.getItem('token');
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-  }
+  const headers = await getAuthHeaders();
   
   const res = await fetch(`${API_BASE}/vendors`, { 
     cache: 'no-store',
@@ -39,11 +25,8 @@ export async function fetchVendors(): Promise<Vendor[]> {
 }
 
 export async function fetchVendor(id: string): Promise<Vendor | null> {
-  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-  const headers: HeadersInit = {};
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
-  }
+  const headers = await getAuthHeaders();
+  
   const res = await fetch(`${API_BASE}/vendors/${id}`, { 
     cache: 'no-store',
     credentials: 'include',
@@ -54,16 +37,12 @@ export async function fetchVendor(id: string): Promise<Vendor | null> {
 }
 
 export async function deleteVendor(id: string): Promise<void> {
-  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-  const headers: HeadersInit = {};
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
-  }
+  const baseHeaders = await getAuthHeaders();
   
   const res = await fetch(`${API_BASE}/vendors/${id}`, { 
     method: 'DELETE',
     credentials: 'include',
-    headers,
+    headers: baseHeaders,
   });
   
   if (!res.ok) {
