@@ -68,7 +68,7 @@ export default function NewApplicationPage() {
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="flex flex-col gap-2">
-                <Label htmlFor="serviceId">Service ID / App Number</Label>
+                <Label htmlFor="serviceId">Application ID</Label>
                 <Input id="serviceId" required placeholder="e.g. SRV-1002" />
               </div>
               <div className="flex flex-col gap-2">

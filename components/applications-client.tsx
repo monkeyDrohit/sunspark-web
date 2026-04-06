@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
   Table,
@@ -14,7 +15,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Search, Plus } from 'lucide-react';
+import { Search, Plus, Eye, Pencil, Trash2, Loader2 } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -24,6 +25,7 @@ import {
 } from '@/components/ui/select';
 import { ApplicationActions } from '@/components/application-actions';
 import type { Application } from '@/lib/api';
+import { deleteApplication } from '@/lib/applications';
 
 function getCurrentStageStatus(stages: { status: string }[]) {
   if (!stages || stages.length === 0) return { label: 'Pending', variant: 'outline' as const };
@@ -46,13 +48,18 @@ export function ApplicationsClient({
   initialStatus?: string;
   initialStage?: string;
 }) {
+  const router = useRouter();
+  const [applications, setApplications] = useState(initialData);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState(initialStatus);
   const [typeFilter, setTypeFilter] = useState('ALL');
   const [stageFilter, setStageFilter] = useState(initialStage);
+  
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const filteredData = useMemo(() => {
-    return initialData.filter((lead) => {
+    return applications.filter((lead) => {
       const matchesSearch =
         lead.consumerName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         lead.serviceId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -66,13 +73,9 @@ export function ApplicationsClient({
       let matchesStage = true;
       if (stageFilter !== 'ALL') {
         if (stageFilter === 'COMPLETED') {
-           // We might consider it completed if the final stage in the DB is completed, or if lead.status is COMPLETED
-           // For exact match with old logic, check if last completed stage is the final one, or just check the last stages 
-           // We will just do a simple check if any stage matches the filter and is completed or in progress, or specific fallback for "COMPLETED"
            const allCompleted = lead.stages?.every(s => s.status === 'COMPLETED') && lead.stages?.length > 0;
            matchesStage = allCompleted || lead.status === 'COMPLETED';
         } else {
-           // For specific stages like JANSAMARTH_BALANCE, we check if that stage exists in the lead's stages
            const hasStage = lead.stages?.some(s => s.stageSlug === stageFilter);
            matchesStage = hasStage;
         }
@@ -80,7 +83,27 @@ export function ApplicationsClient({
       
       return matchesSearch && matchesStatus && matchesType && matchesStage;
     });
-  }, [initialData, searchTerm, statusFilter, typeFilter, stageFilter]);
+  }, [applications, searchTerm, statusFilter, typeFilter, stageFilter]);
+
+  async function handleDelete(id: string) {
+    if (!window.confirm('Are you sure you want to delete this application? This action cannot be undone.')) {
+      return;
+    }
+
+    setIsDeleting(true);
+    setDeletingId(id);
+    try {
+      await deleteApplication(id);
+      setApplications(applications.filter((a) => a.id !== id));
+      router.refresh();
+    } catch (error) {
+      console.error(error);
+      alert(error instanceof Error ? error.message : 'Failed to delete application');
+    } finally {
+      setIsDeleting(false);
+      setDeletingId(null);
+    }
+  }
 
   if (error) {
     return (
@@ -179,7 +202,7 @@ export function ApplicationsClient({
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Service ID</TableHead>
+                <TableHead>Application ID</TableHead>
                 <TableHead>Customer</TableHead>
                 <TableHead>Field Agent</TableHead>
                 <TableHead>Type</TableHead>
@@ -206,11 +229,34 @@ export function ApplicationsClient({
                       <Badge variant={stageStatus.variant}>{stageStatus.label}</Badge>
                     </TableCell>
                     <TableCell className="text-right">
-                      <div className="flex justify-end gap-2">
-                        <Button variant="ghost" size="sm" asChild>
-                          <Link href={`/applications/${lead.id}`}>View</Link>
+                      <div className="flex justify-end gap-1">
+                        <Button variant="ghost" size="icon" asChild title="View">
+                          <Link href={`/applications/${lead.id}`}>
+                            <Eye className="h-4 w-4" />
+                          </Link>
                         </Button>
-                        <ApplicationActions app={lead as any} />
+                        <Button variant="ghost" size="icon" asChild title="Edit">
+                          <Link href={`/applications/${lead.id}/edit`}>
+                            <Pencil className="h-4 w-4" />
+                          </Link>
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                          title="Delete"
+                          onClick={() => handleDelete(lead.id)}
+                          disabled={isDeleting && deletingId === lead.id}
+                        >
+                          {isDeleting && deletingId === lead.id ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <Trash2 className="h-4 w-4" />
+                          )}
+                        </Button>
+                        <div className="ml-1 flex items-center">
+                          <ApplicationActions app={lead as any} />
+                        </div>
                       </div>
                     </TableCell>
                   </TableRow>

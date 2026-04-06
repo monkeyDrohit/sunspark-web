@@ -99,3 +99,23 @@ export async function updateApplication(id: string, data: Partial<Application>):
   }
   return res.json();
 }
+
+export async function deleteApplication(id: string): Promise<{ message: string }> {
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+  const headers: HeadersInit = {};
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  
+  const res = await fetch(`${API_BASE}/applications/${id}`, {
+    method: 'DELETE',
+    headers,
+    credentials: 'include',
+  });
+  
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.error || 'Failed to delete application');
+  }
+  return res.json();
+}

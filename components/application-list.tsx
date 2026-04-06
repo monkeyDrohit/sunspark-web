@@ -1,6 +1,8 @@
 'use client';
 
-import { Application } from "@/lib/applications";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Application, deleteApplication } from "@/lib/applications";
 import {
   Table,
   TableBody,
@@ -12,7 +14,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Eye, Pencil } from "lucide-react";
+import { Eye, Pencil, Trash2, Loader2 } from "lucide-react";
 import Link from "next/link";
 
 interface ApplicationListProps {
@@ -20,7 +22,32 @@ interface ApplicationListProps {
   error?: string | null;
 }
 
-export function ApplicationList({ leads, error }: ApplicationListProps) {
+export function ApplicationList({ leads: initialLeads, error }: ApplicationListProps) {
+  const router = useRouter();
+  const [leads, setLeads] = useState(initialLeads);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  async function handleDelete(id: string) {
+    if (!window.confirm('Are you sure you want to delete this application? This action cannot be undone.')) {
+      return;
+    }
+
+    setIsDeleting(true);
+    setDeletingId(id);
+    try {
+      await deleteApplication(id);
+      setLeads(leads.filter((lead) => lead.id !== id));
+      router.refresh();
+    } catch (error) {
+      console.error(error);
+      alert(error instanceof Error ? error.message : 'Failed to delete application');
+    } finally {
+      setIsDeleting(false);
+      setDeletingId(null);
+    }
+  }
+
   const getStatusBadge = (status: string) => {
     const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
       PENDING: "outline",
@@ -57,7 +84,7 @@ export function ApplicationList({ leads, error }: ApplicationListProps) {
         <TableHeader>
           <TableRow>
             <TableHead className="w-12">S.No.</TableHead>
-            <TableHead>Service ID</TableHead>
+            <TableHead>Application ID</TableHead>
             <TableHead>Customer Name</TableHead>
             <TableHead>Contact Number</TableHead>
             <TableHead>Status</TableHead>
@@ -82,15 +109,29 @@ export function ApplicationList({ leads, error }: ApplicationListProps) {
               </TableCell>
               <TableCell>
                 <div className="flex gap-1">
-                  <Button variant="ghost" size="icon" asChild>
+                  <Button variant="ghost" size="icon" asChild title="View">
                     <Link href={`/applications/${lead.id}`}>
                       <Eye className="h-4 w-4" />
                     </Link>
                   </Button>
-                  <Button variant="ghost" size="icon" asChild>
+                  <Button variant="ghost" size="icon" asChild title="Edit">
                     <Link href={`/applications/${lead.id}/edit`}>
                       <Pencil className="h-4 w-4" />
                     </Link>
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                    title="Delete"
+                    onClick={() => handleDelete(lead.id)}
+                    disabled={isDeleting && deletingId === lead.id}
+                  >
+                    {isDeleting && deletingId === lead.id ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Trash2 className="h-4 w-4" />
+                    )}
                   </Button>
                 </div>
               </TableCell>

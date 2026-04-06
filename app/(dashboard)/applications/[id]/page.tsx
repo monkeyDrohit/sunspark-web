@@ -75,7 +75,7 @@ export default async function ApplicationDetailPage({
             </CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
-            <InfoRow label="Service ID" value={lead.serviceId} />
+            <InfoRow label="Application ID" value={lead.serviceId} />
             <InfoRow label="Project Type" value={lead.projectType?.replace('_', ' ')} />
             <InfoRow label="Status" value={lead.status} />
             <InfoRow label="Assigned Field Agent" value={lead.fieldAgent?.name || 'Unassigned'} />
