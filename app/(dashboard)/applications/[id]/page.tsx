@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { StageTracker } from "@/components/stage-tracker";
 import { ApplicationActions } from "@/components/application-actions";
 import { DocumentVault } from "@/components/document-vault";
+import { ApplicationWorkflow } from "@/components/application-workflow";
 
 function InfoRow({
   label,
@@ -57,6 +58,8 @@ export default async function ApplicationDetailPage({
         </div>
         <ApplicationActions app={lead} />
       </div>
+
+      <ApplicationWorkflow application={lead as any} />
 
       <Card className="mb-6">
         <CardHeader className="pb-2">

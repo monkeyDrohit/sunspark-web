@@ -93,7 +93,7 @@ export function DocumentVault({ applicationId }: { applicationId: string }) {
   }
 
   return (
-    <Card className="mt-6">
+    <Card id="documents" className="mt-6">
       <CardHeader>
         <CardTitle className="text-lg flex items-center gap-2">
           <FileText className="w-5 h-5" />

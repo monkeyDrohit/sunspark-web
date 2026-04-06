@@ -117,11 +117,7 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* Bottom logo/tagline */}
-          <div className="absolute bottom-12 flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-black flex items-center justify-center text-white font-bold text-xs">N</div>
-            <span className="text-white/60 text-sm font-medium tracking-wider uppercase">SunSpark Admin v1.0</span>
-          </div>
+
         </div>
       </div>
 

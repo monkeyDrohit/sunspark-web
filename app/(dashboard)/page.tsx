@@ -64,46 +64,54 @@ function SystemAdminDashboard({ data }: { data: any }) {
       <div>
         <h2 className="text-lg font-medium tracking-tight mb-4">Platform Adoption</h2>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Card className="border-border/50 bg-card/50">
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Active Vendors</CardTitle>
-              <Building2 className="h-4 w-4 text-primary" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-semibold">{data.vendors.active}</div>
-              <p className="text-xs text-muted-foreground mt-1">{data.vendors.inactive} Inactive Vendors</p>
-            </CardContent>
-          </Card>
-          <Card className="border-border/50 bg-card/50">
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Customers</CardTitle>
-              <Users className="h-4 w-4 text-primary" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-semibold">{data.users.customers}</div>
-              <p className="text-xs text-muted-foreground mt-1">Platform-wide end users</p>
-            </CardContent>
-          </Card>
-          <Card className="border-border/50 bg-card/50">
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Field Agents</CardTitle>
-              <HardHat className="h-4 w-4 text-primary" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-semibold">{data.users.fieldAgents}</div>
-              <p className="text-xs text-muted-foreground mt-1">Deploying on the ground</p>
-            </CardContent>
-          </Card>
-          <Card className="border-border/50 bg-card/50">
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Admin Staff</CardTitle>
-              <UserCheck className="h-4 w-4 text-primary" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-semibold">{data.users.superAdmins + data.users.subAdmins}</div>
-              <p className="text-xs text-muted-foreground mt-1">Managing vendor operations</p>
-            </CardContent>
-          </Card>
+          <Link href="/vendors" className="block h-full">
+            <Card className="h-full border-border/50 bg-card/50 hover:bg-card hover:border-primary/20 transition-all">
+              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+                <CardTitle className="text-sm font-medium text-muted-foreground">Active Vendors</CardTitle>
+                <Building2 className="h-4 w-4 text-primary" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-semibold">{data.vendors.active}</div>
+                <p className="text-xs text-muted-foreground mt-1">{data.vendors.inactive} Inactive Vendors</p>
+              </CardContent>
+            </Card>
+          </Link>
+          <Link href="/users/customers" className="block h-full">
+            <Card className="h-full border-border/50 bg-card/50 hover:bg-card hover:border-primary/20 transition-all">
+              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+                <CardTitle className="text-sm font-medium text-muted-foreground">Customers</CardTitle>
+                <Users className="h-4 w-4 text-primary" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-semibold">{data.users.customers}</div>
+                <p className="text-xs text-muted-foreground mt-1">Platform-wide end users</p>
+              </CardContent>
+            </Card>
+          </Link>
+          <Link href="/users/field-agents" className="block h-full">
+            <Card className="h-full border-border/50 bg-card/50 hover:bg-card hover:border-primary/20 transition-all">
+              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+                <CardTitle className="text-sm font-medium text-muted-foreground">Field Agents</CardTitle>
+                <HardHat className="h-4 w-4 text-primary" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-semibold">{data.users.fieldAgents}</div>
+                <p className="text-xs text-muted-foreground mt-1">Deploying on the ground</p>
+              </CardContent>
+            </Card>
+          </Link>
+          <Link href="/users" className="block h-full">
+            <Card className="h-full border-border/50 bg-card/50 hover:bg-card hover:border-primary/20 transition-all">
+              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+                <CardTitle className="text-sm font-medium text-muted-foreground">Admin Staff</CardTitle>
+                <UserCheck className="h-4 w-4 text-primary" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-semibold">{data.users.superAdmins + data.users.subAdmins}</div>
+                <p className="text-xs text-muted-foreground mt-1">Managing vendor operations</p>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
       </div>
 
@@ -159,29 +167,29 @@ function SuperAdminDashboard({ data }: { data: any }) {
     <div className="space-y-8">
       <div>
         <h2 className="text-lg font-medium tracking-tight mb-4">Application Pipeline Funnel</h2>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-          <Card className="border-border/50 bg-card/30">
+        <div className="flex flex-col lg:flex-row items-center gap-4">
+          <Card className="flex-1 border-border/50 bg-card/30 w-full">
             <CardContent className="p-4 flex flex-col items-center text-center gap-1">
               <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Total Apps</span>
               <span className="text-2xl font-semibold">{data.pipeline.totalApps}</span>
             </CardContent>
           </Card>
-          <div className="hidden lg:flex items-center justify-center"><TrendingUp className="text-muted-foreground" /></div>
-          <Card className="border-border/50 bg-card/30">
+          <TrendingUp className="hidden lg:block text-muted-foreground shrink-0" />
+          <Card className="flex-1 border-border/50 bg-card/30 w-full">
             <CardContent className="p-4 flex flex-col items-center text-center gap-1">
               <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Quotations</span>
               <span className="text-2xl font-semibold">{data.pipeline.quotations}</span>
             </CardContent>
           </Card>
-          <div className="hidden lg:flex items-center justify-center"><TrendingUp className="text-muted-foreground" /></div>
-          <Card className="border-border/50 bg-card/30">
+          <TrendingUp className="hidden lg:block text-muted-foreground shrink-0" />
+          <Card className="flex-1 border-border/50 bg-card/30 w-full">
             <CardContent className="p-4 flex flex-col items-center text-center gap-1">
               <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Installations</span>
               <span className="text-2xl font-semibold">{data.pipeline.installations}</span>
             </CardContent>
           </Card>
-          <div className="hidden lg:flex items-center justify-center"><TrendingUp className="text-muted-foreground" /></div>
-          <Card className="border-primary/50 bg-primary/5">
+          <TrendingUp className="hidden lg:block text-muted-foreground shrink-0" />
+          <Card className="flex-1 border-primary/50 bg-primary/5 w-full">
             <CardContent className="p-4 flex flex-col items-center text-center gap-1">
               <span className="text-xs text-primary font-bold uppercase tracking-wider">Completed</span>
               <span className="text-2xl font-bold text-primary">{data.pipeline.completed}</span>

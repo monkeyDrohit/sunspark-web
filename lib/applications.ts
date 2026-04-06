@@ -120,3 +120,24 @@ export async function deleteApplication(id: string): Promise<{ message: string }
   }
   return res.json();
 }
+
+export async function createApplication(data: any): Promise<Application> {
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+  const headers: HeadersInit = { 'Content-Type': 'application/json' };
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  
+  const res = await fetch(`${API_BASE}/applications`, {
+    method: 'POST',
+    headers,
+    credentials: 'include',
+    body: JSON.stringify(data),
+  });
+  
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.error || 'Failed to create application');
+  }
+  return res.json();
+}

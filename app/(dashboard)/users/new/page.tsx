@@ -38,6 +38,7 @@ export default function NewUserPage() {
     password: "",
     confirmPassword: "",
     gender: "MALE",
+    type: "RESIDENTIAL",
     status: "ACTIVE",
     profilePicture: "",
     country: "India",
@@ -329,6 +330,24 @@ export default function NewUserPage() {
 
               {formData.role === 'CUSTOMER' && (
                 <>
+                  <div className="space-y-2">
+                    <Label htmlFor="type" className="after:content-['*'] after:ml-0.5 after:text-red-500">Customer Type</Label>
+                    <Select
+                      value={formData.type}
+                      onValueChange={(val) => handleChange("type", val)}
+                      required
+                    >
+                      <SelectTrigger id="type">
+                        <SelectValue placeholder="Select type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="RESIDENTIAL">Residential</SelectItem>
+                        <SelectItem value="COMMERCIAL">Commercial</SelectItem>
+                        <SelectItem value="INDUSTRIAL">Industrial</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
                   <div className="space-y-2">
                     <Label htmlFor="fieldAgentId">Field Agent</Label>
                     <Select

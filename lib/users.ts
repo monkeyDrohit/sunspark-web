@@ -14,6 +14,7 @@ export interface BaseUser {
   customerProfile?: {
     id: string;
     mobile: string;
+    type?: string;
     city: string | null;
     state: string | null;
     address: string | null;

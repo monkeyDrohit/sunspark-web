@@ -46,7 +46,6 @@ const navItems = [
   { href: '/applications', label: 'Applications', icon: FileText, roles: ['SYSTEM_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN', 'FIELD_AGENT', 'CUSTOMER'] },
   { href: '/brands', label: 'Brands', icon: Tag, roles: ['SYSTEM_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'] },
   { href: '/categories', label: 'Category', icon: Grid3x3, roles: ['SYSTEM_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'] },
-  { href: '/quotations', label: 'Quotations', icon: FileText, roles: ['SYSTEM_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN', 'FIELD_AGENT', 'CUSTOMER'] },
   { href: '/products', label: 'Products', icon: Package, roles: ['SYSTEM_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'] },
   { href: '/orders', label: 'Orders', icon: ShoppingCart, roles: ['SYSTEM_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN', 'FIELD_AGENT', 'CUSTOMER'] },
   {

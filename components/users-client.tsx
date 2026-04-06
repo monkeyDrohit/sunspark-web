@@ -128,6 +128,7 @@ export default function UsersClient({ initialUsers }: { initialUsers: BaseUser[]
             <TableRow>
               <TableHead>Name</TableHead>
               <TableHead>Role</TableHead>
+              <TableHead>Type</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Mobile No</TableHead>
               <TableHead>Field Agent</TableHead>
@@ -156,6 +157,13 @@ export default function UsersClient({ initialUsers }: { initialUsers: BaseUser[]
                     <TableCell className="font-medium">{u.name || "—"}</TableCell>
                     <TableCell>
                       <Badge variant="outline">{u.role.replace('_', ' ')}</Badge>
+                    </TableCell>
+                    <TableCell>
+                      {u.customerProfile?.type ? (
+                        <Badge variant="secondary">{u.customerProfile.type}</Badge>
+                      ) : (
+                        "—"
+                      )}
                     </TableCell>
                     <TableCell>{u.email}</TableCell>
                     <TableCell>{mobileNo}</TableCell>
