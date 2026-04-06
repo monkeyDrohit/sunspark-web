@@ -1,3 +1,5 @@
+import { getAuthHeaders } from './api-helpers';
+
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
 
 export interface Product {
@@ -28,6 +30,7 @@ export async function fetchProducts(params?: {
   brandId?: string;
   categoryId?: string;
   status?: string;
+  vendorId?: string | null;
 }): Promise<Product[]> {
   const searchParams = new URLSearchParams();
   if (params) {
@@ -36,25 +39,10 @@ export async function fetchProducts(params?: {
     });
   }
   
-  // Get auth headers (works on both server and client)
-  const headers: HeadersInit = {};
-  if (typeof window === 'undefined') {
-    // Server-side: read from cookies
-    const { cookies } = await import('next/headers');
-    const cookieStore = await cookies();
-    const token = cookieStore.get('token')?.value;
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-  } else {
-    // Client-side: read from localStorage
-    const token = localStorage.getItem('token');
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-  }
+  const url = `${API_BASE}/products?${searchParams}`;
+  const headers = await getAuthHeaders();
   
-  const res = await fetch(`${API_BASE}/products?${searchParams}`, { 
+  const res = await fetch(url, { 
     cache: 'no-store',
     credentials: 'include',
     headers,
@@ -64,11 +52,7 @@ export async function fetchProducts(params?: {
 }
 
 export async function fetchProduct(id: string): Promise<Product | null> {
-  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-  const headers: HeadersInit = {};
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
-  }
+  const headers = await getAuthHeaders();
   const res = await fetch(`${API_BASE}/products/${id}`, { 
     cache: 'no-store',
     credentials: 'include',

@@ -1,8 +1,11 @@
+import { getAuthHeaders } from './api-helpers';
+
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
 
 export interface Quotation {
   id: string;
   quotationNumber: string | null;
+  applicationId: string | null;
   customerId: string;
   customer: { id: string; name: string; email: string };
   status: string;
@@ -13,6 +16,7 @@ export interface Quotation {
   updatedAt: string;
   items?: Array<{
     id: string;
+    productId: string;
     product: { id: string; name: string };
     quantity: number;
     unitPrice: string;
@@ -20,30 +24,59 @@ export interface Quotation {
   }>;
 }
 
-export async function fetchQuotations(): Promise<Quotation[]> {
-  // Get auth headers (works on both server and client)
-  const headers: HeadersInit = {};
-  if (typeof window === 'undefined') {
-    // Server-side: read from cookies
-    const { cookies } = await import('next/headers');
-    const cookieStore = await cookies();
-    const token = cookieStore.get('token')?.value;
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-  } else {
-    // Client-side: read from localStorage
-    const token = localStorage.getItem('token');
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-  }
+export interface QuotationInput {
+  applicationId?: string;
+  customerId: string;
+  totalAmount: number;
+  notes?: string;
+  items: Array<{
+    productId: string;
+    quantity: number;
+    unitPrice: number;
+  }>;
+}
+
+export async function fetchQuotations(vendorId?: string | null): Promise<Quotation[]> {
+  const url = vendorId ? `${API_BASE}/quotations?vendorId=${vendorId}` : `${API_BASE}/quotations`;
+  const headers = await getAuthHeaders();
   
-  const res = await fetch(`${API_BASE}/quotations`, { 
+  const res = await fetch(url, { 
     cache: 'no-store',
     credentials: 'include',
     headers,
   });
   if (!res.ok) throw new Error('Failed to fetch quotations');
+  return res.json();
+}
+
+export async function fetchQuotation(id: string): Promise<Quotation | null> {
+  const headers = await getAuthHeaders();
+  const res = await fetch(`${API_BASE}/quotations/${id}`, { 
+    cache: 'no-store',
+    credentials: 'include',
+    headers,
+  });
+  if (!res.ok) return null;
+  return res.json();
+}
+
+export async function createQuotation(data: QuotationInput): Promise<Quotation> {
+  const baseHeaders = await getAuthHeaders();
+  const headers = {
+    ...baseHeaders,
+    'Content-Type': 'application/json',
+  };
+  
+  const res = await fetch(`${API_BASE}/quotations`, {
+    method: 'POST',
+    headers,
+    credentials: 'include',
+    body: JSON.stringify(data),
+  });
+  
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.error || 'Failed to create quotation');
+  }
   return res.json();
 }

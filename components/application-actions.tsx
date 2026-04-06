@@ -83,6 +83,9 @@ export function ApplicationActions({ app }: { app: Application }) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem onClick={openUpdateStage}>Update stage</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => router.push(`/applications/${app.id}/quotation`)}>
+            Create Quotation
+          </DropdownMenuItem>
           <DropdownMenuItem>Edit details</DropdownMenuItem>
           <DropdownMenuItem>View documents</DropdownMenuItem>
         </DropdownMenuContent>
