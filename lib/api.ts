@@ -3,14 +3,14 @@ import { getAuthHeaders } from './api-helpers';
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
 
 export type StageSlug =
-  | 'REGISTRATION'
-  | 'APPLICATION'
+  | 'SERVICE_LEAD'
+  | 'QUOTATION'
+  | 'DOCUMENTS_SUBMISSION'
+  | 'APPLICATION_SUBMISSION'
   | 'FEASIBILITY'
-  | 'VENDOR_SELECTION'
-  | 'UPLOAD_AGREEMENT'
+  | 'PAYMENT_BALANCE'
   | 'INSTALLATION'
-  | 'INSPECTION'
-  | 'PROJECT_COMMISSIONING'
+  | 'DISCOM_INSPECTION'
   | 'SUBSIDY_REQUEST'
   | 'SUBSIDY_DISBURSAL';
 
@@ -18,7 +18,7 @@ export type StageStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED';
 
 export interface ApplicationStage {
   id: string;
-  serviceLeadId: string;
+  applicationId: string;
   stageSlug: StageSlug;
   status: StageStatus;
   completedAt: string | null;
@@ -35,7 +35,7 @@ export interface Discom {
   district: string | null;
 }
 
-export interface ServiceLead {
+export interface Application {
   id: string;
   serviceId: string;
   discomId: string;
@@ -63,8 +63,8 @@ export interface ServiceLead {
   updatedAt: string;
 }
 
-export async function fetchServiceLeads(vendorId?: string | null): Promise<ServiceLead[]> {
-  const url = vendorId ? `${API_BASE}/service-leads?vendorId=${vendorId}` : `${API_BASE}/service-leads`;
+export async function fetchApplications(vendorId?: string | null): Promise<Application[]> {
+  const url = vendorId ? `${API_BASE}/applications?vendorId=${vendorId}` : `${API_BASE}/applications`;
   
   const headers = await getAuthHeaders();
   
@@ -77,10 +77,10 @@ export async function fetchServiceLeads(vendorId?: string | null): Promise<Servi
   return res.json();
 }
 
-export async function fetchServiceLead(id: string): Promise<ServiceLead | null> {
+export async function fetchApplication(id: string): Promise<Application | null> {
   const headers = await getAuthHeaders();
   
-  const res = await fetch(`${API_BASE}/service-leads/${id}`, { 
+  const res = await fetch(`${API_BASE}/applications/${id}`, { 
     cache: 'no-store',
     credentials: 'include',
     headers,
@@ -89,8 +89,8 @@ export async function fetchServiceLead(id: string): Promise<ServiceLead | null> 
   return res.json();
 }
 
-export async function updateServiceLeadStage(
-  serviceLeadId: string,
+export async function updateApplicationStage(
+  applicationId: string,
   stageSlug: string,
   status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED',
   notes?: string
@@ -101,7 +101,7 @@ export async function updateServiceLeadStage(
     'Content-Type': 'application/json',
   };
   
-  const res = await fetch(`${API_BASE}/service-leads/${serviceLeadId}/stages`, {
+  const res = await fetch(`${API_BASE}/applications/${applicationId}/stages`, {
     method: 'PUT',
     headers,
     credentials: 'include',

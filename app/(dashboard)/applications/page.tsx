@@ -1,7 +1,7 @@
-import { fetchServiceLeads } from "@/lib/api";
-import { ServiceLeadsClient } from "@/components/service-leads-client";
+import { fetchApplications } from "@/lib/api";
+import { ApplicationsClient } from "@/components/applications-client";
 
-export default async function ServiceLeadsPage({
+export default async function ApplicationsPage({
   searchParams,
 }: {
   searchParams: Promise<{ vendorId?: string; status?: string; stage?: string }>;
@@ -11,18 +11,18 @@ export default async function ServiceLeadsPage({
   const initialStatus = params.status || 'ALL';
   const initialStage = params.stage || 'ALL';
   
-  let serviceLeads: Awaited<ReturnType<typeof fetchServiceLeads>> = [];
+  let applications: Awaited<ReturnType<typeof fetchApplications>> = [];
   let error: string | null = null;
   
   try {
-    serviceLeads = await fetchServiceLeads(vendorId);
+    applications = await fetchApplications(vendorId);
   } catch (e) {
     error = e instanceof Error ? e.message : "Failed to load service leads";
   }
 
   return (
-    <ServiceLeadsClient 
-      initialData={serviceLeads} 
+    <ApplicationsClient 
+      initialData={applications} 
       error={error} 
       initialStatus={initialStatus} 
       initialStage={initialStage} 

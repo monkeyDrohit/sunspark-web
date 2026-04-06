@@ -26,10 +26,10 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { STAGE_ORDER, STAGE_LABELS } from '@/lib/stages';
-import { updateServiceLeadStage } from '@/lib/api';
-import type { ServiceLead, StageSlug } from '@/lib/api';
+import { updateApplicationStage } from '@/lib/api';
+import type { Application, StageSlug } from '@/lib/api';
 
-export function ApplicationActions({ app }: { app: ServiceLead }) {
+export function ApplicationActions({ app }: { app: Application }) {
   const router = useRouter();
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -65,7 +65,7 @@ export function ApplicationActions({ app }: { app: ServiceLead }) {
     setLoading(true);
     setError('');
     try {
-      await updateServiceLeadStage(app.id, stageSlug, status, notes);
+      await updateApplicationStage(app.id, stageSlug, status, notes);
       setIsUpdateOpen(false);
       router.refresh(); // Refresh page to see updated stage
     } catch (err: any) {

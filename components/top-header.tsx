@@ -20,7 +20,7 @@ const mainNav = [
   { href: '/customers', label: 'Customers' },
   { href: '/field-agents', label: 'Field Agents' },
   { href: '/products', label: 'Products' },
-  { href: '/service-leads', label: 'Service Leads' },
+  { href: '/applications', label: 'Applications' },
   { href: '/quotations', label: 'Quotations' },
   { href: '/orders', label: 'Orders' },
 ];

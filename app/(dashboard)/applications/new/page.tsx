@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-export default function NewServiceLeadPage() {
+export default function NewApplicationPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -18,10 +18,10 @@ export default function NewServiceLeadPage() {
     setLoading(true);
     setError('');
     
-    // In a real implementation, you would post this data to /api/service-leads
+    // In a real implementation, you would post this data to /api/applications
     // For now, let's just mock a success and redirect back
     setTimeout(() => {
-      router.push('/service-leads');
+      router.push('/applications');
       router.refresh();
     }, 1000);
   };
@@ -31,13 +31,13 @@ export default function NewServiceLeadPage() {
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <Link
-            href="/service-leads"
+            href="/applications"
             className="text-sm text-muted-foreground hover:text-foreground"
           >
-            ← Service Leads
+            ← Applications
           </Link>
           <h1 className="mt-1 text-2xl font-semibold text-foreground">
-            Create Service Lead
+            Create Application
           </h1>
           <p className="text-muted-foreground mt-1">
             Manually log a new inquiry or government application.

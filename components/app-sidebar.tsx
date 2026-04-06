@@ -43,7 +43,7 @@ const navItems = [
     ],
   },
   { href: '/track-agents', label: 'Track Agents', icon: MapPin, roles: ['SYSTEM_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'] },
-  { href: '/service-leads', label: 'Service Leads', icon: FileText, roles: ['SYSTEM_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN', 'FIELD_AGENT', 'CUSTOMER'] },
+  { href: '/applications', label: 'Applications', icon: FileText, roles: ['SYSTEM_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN', 'FIELD_AGENT', 'CUSTOMER'] },
   { href: '/brands', label: 'Brands', icon: Tag, roles: ['SYSTEM_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'] },
   { href: '/categories', label: 'Category', icon: Grid3x3, roles: ['SYSTEM_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'] },
   { href: '/quotations', label: 'Quotations', icon: FileText, roles: ['SYSTEM_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN', 'FIELD_AGENT', 'CUSTOMER'] },

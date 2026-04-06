@@ -1,6 +1,6 @@
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
 
-export interface ServiceLead {
+export interface Application {
   id: string;
   serviceId: string;
   customerId: string;
@@ -21,7 +21,7 @@ export interface ServiceLead {
   updatedAt: string;
 }
 
-export async function fetchServiceLeads(params?: {
+export async function fetchApplications(params?: {
   status?: string;
   stage?: string;
   projectType?: string;
@@ -29,7 +29,7 @@ export async function fetchServiceLeads(params?: {
   dateTo?: string;
   customerName?: string;
   contactNumber?: string;
-}): Promise<ServiceLead[]> {
+}): Promise<Application[]> {
   const searchParams = new URLSearchParams();
   if (params) {
     Object.entries(params).forEach(([key, value]) => {
@@ -55,7 +55,7 @@ export async function fetchServiceLeads(params?: {
     }
   }
   
-  const res = await fetch(`${API_BASE}/service-leads?${searchParams}`, { 
+  const res = await fetch(`${API_BASE}/applications?${searchParams}`, { 
     cache: 'no-store',
     credentials: 'include',
     headers,
@@ -64,13 +64,13 @@ export async function fetchServiceLeads(params?: {
   return res.json();
 }
 
-export async function fetchServiceLead(id: string): Promise<ServiceLead | null> {
+export async function fetchApplication(id: string): Promise<Application | null> {
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
   const headers: HeadersInit = {};
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }
-  const res = await fetch(`${API_BASE}/service-leads/${id}`, { 
+  const res = await fetch(`${API_BASE}/applications/${id}`, { 
     cache: 'no-store',
     credentials: 'include',
     headers,
@@ -79,14 +79,14 @@ export async function fetchServiceLead(id: string): Promise<ServiceLead | null> 
   return res.json();
 }
 
-export async function updateServiceLead(id: string, data: Partial<ServiceLead>): Promise<ServiceLead> {
+export async function updateApplication(id: string, data: Partial<Application>): Promise<Application> {
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
   const headers: HeadersInit = { 'Content-Type': 'application/json' };
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }
   
-  const res = await fetch(`${API_BASE}/service-leads/${id}`, {
+  const res = await fetch(`${API_BASE}/applications/${id}`, {
     method: 'PUT',
     headers,
     credentials: 'include',

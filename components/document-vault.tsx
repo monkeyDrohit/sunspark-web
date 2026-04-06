@@ -21,7 +21,7 @@ const DOCUMENT_TYPES = [
   { label: 'Other', value: 'OTHER' },
 ];
 
-export function DocumentVault({ serviceLeadId }: { serviceLeadId: string }) {
+export function DocumentVault({ applicationId }: { applicationId: string }) {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
@@ -33,12 +33,12 @@ export function DocumentVault({ serviceLeadId }: { serviceLeadId: string }) {
 
   useEffect(() => {
     loadDocuments();
-  }, [serviceLeadId]);
+  }, [applicationId]);
 
   async function loadDocuments() {
     try {
       setLoading(true);
-      const data = await fetchDocuments(serviceLeadId);
+      const data = await fetchDocuments(applicationId);
       setDocuments(data);
     } catch (error) {
       console.error('Failed to load documents:', error);
@@ -52,7 +52,7 @@ export function DocumentVault({ serviceLeadId }: { serviceLeadId: string }) {
 
     try {
       setUploading(true);
-      await uploadDocument(serviceLeadId, selectedType, selectedFile);
+      await uploadDocument(applicationId, selectedType, selectedFile);
       toast({
         title: 'Success',
         description: 'Document uploaded successfully',

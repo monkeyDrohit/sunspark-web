@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { ApplicationActions } from '@/components/application-actions';
-import type { ServiceLead } from '@/lib/api';
+import type { Application } from '@/lib/api';
 
 function getCurrentStageStatus(stages: { status: string }[]) {
   if (!stages || stages.length === 0) return { label: 'Pending', variant: 'outline' as const };
@@ -35,13 +35,13 @@ function getCurrentStageStatus(stages: { status: string }[]) {
   return { label: 'Pending', variant: 'outline' as const };
 }
 
-export function ServiceLeadsClient({
+export function ApplicationsClient({
   initialData,
   error,
   initialStatus = 'ALL',
   initialStage = 'ALL',
 }: {
-  initialData: ServiceLead[];
+  initialData: Application[];
   error: string | null;
   initialStatus?: string;
   initialStage?: string;
@@ -101,14 +101,14 @@ export function ServiceLeadsClient({
     <div className="p-6 md:p-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-semibold text-foreground">Service Leads</h1>
+          <h1 className="text-2xl font-semibold text-foreground">Applications</h1>
           <p className="text-sm text-muted-foreground mt-1">
             Manage solar project applications, field assignments, and tracking.
           </p>
         </div>
         <Button asChild>
-          <Link href="/service-leads/new">
-            <Plus className="mr-2 h-4 w-4" /> Create Service Lead
+          <Link href="/applications/new">
+            <Plus className="mr-2 h-4 w-4" /> Create Application
           </Link>
         </Button>
       </div>
@@ -154,18 +154,16 @@ export function ServiceLeadsClient({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="ALL">All Stages</SelectItem>
-            <SelectItem value="REGISTRATION">Registration</SelectItem>
-            <SelectItem value="APPLICATION">Application</SelectItem>
+            <SelectItem value="SERVICE_LEAD">Service Lead</SelectItem>
+            <SelectItem value="QUOTATION">Quotation</SelectItem>
+            <SelectItem value="DOCUMENTS_SUBMISSION">Documents Submission</SelectItem>
+            <SelectItem value="APPLICATION_SUBMISSION">Application Submission</SelectItem>
             <SelectItem value="FEASIBILITY">Feasibility</SelectItem>
-            <SelectItem value="VENDOR_SELECTION">Vendor Selection</SelectItem>
-            <SelectItem value="UPLOAD_AGREEMENT">Upload Agreement</SelectItem>
+            <SelectItem value="PAYMENT_BALANCE">Payment / Balance</SelectItem>
             <SelectItem value="INSTALLATION">Installation</SelectItem>
-            <SelectItem value="INSPECTION">Inspection</SelectItem>
-            <SelectItem value="PROJECT_COMMISSIONING">Commissioning</SelectItem>
+            <SelectItem value="DISCOM_INSPECTION">DisCom Inspection</SelectItem>
             <SelectItem value="SUBSIDY_REQUEST">Subsidy Request</SelectItem>
             <SelectItem value="SUBSIDY_DISBURSAL">Subsidy Disbursal</SelectItem>
-            <SelectItem value="JANSAMARTH_BALANCE">Jansamarth Balance</SelectItem>
-            <SelectItem value="COMPLETED">Completed</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -210,7 +208,7 @@ export function ServiceLeadsClient({
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
                         <Button variant="ghost" size="sm" asChild>
-                          <Link href={`/service-leads/${lead.id}`}>View</Link>
+                          <Link href={`/applications/${lead.id}`}>View</Link>
                         </Button>
                         <ApplicationActions app={lead as any} />
                       </div>

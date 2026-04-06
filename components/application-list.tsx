@@ -1,6 +1,6 @@
 'use client';
 
-import { ServiceLead } from "@/lib/service-leads";
+import { Application } from "@/lib/applications";
 import {
   Table,
   TableBody,
@@ -15,12 +15,12 @@ import { Button } from "@/components/ui/button";
 import { Eye, Pencil } from "lucide-react";
 import Link from "next/link";
 
-interface ServiceLeadListProps {
-  leads: ServiceLead[];
+interface ApplicationListProps {
+  leads: Application[];
   error?: string | null;
 }
 
-export function ServiceLeadList({ leads, error }: ServiceLeadListProps) {
+export function ApplicationList({ leads, error }: ApplicationListProps) {
   const getStatusBadge = (status: string) => {
     const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
       PENDING: "outline",
@@ -83,12 +83,12 @@ export function ServiceLeadList({ leads, error }: ServiceLeadListProps) {
               <TableCell>
                 <div className="flex gap-1">
                   <Button variant="ghost" size="icon" asChild>
-                    <Link href={`/service-leads/${lead.id}`}>
+                    <Link href={`/applications/${lead.id}`}>
                       <Eye className="h-4 w-4" />
                     </Link>
                   </Button>
                   <Button variant="ghost" size="icon" asChild>
-                    <Link href={`/service-leads/${lead.id}/edit`}>
+                    <Link href={`/applications/${lead.id}/edit`}>
                       <Pencil className="h-4 w-4" />
                     </Link>
                   </Button>

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { fetchServiceLead } from "@/lib/api";
+import { fetchApplication } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { StageTracker } from "@/components/stage-tracker";
@@ -23,13 +23,13 @@ function InfoRow({
   );
 }
 
-export default async function ServiceLeadDetailPage({
+export default async function ApplicationDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const lead = await fetchServiceLead(id);
+  const lead = await fetchApplication(id);
   if (!lead) notFound();
 
   return (
@@ -37,10 +37,10 @@ export default async function ServiceLeadDetailPage({
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <Link
-            href="/service-leads"
+            href="/applications"
             className="text-sm text-muted-foreground hover:text-foreground"
           >
-            ← Service Leads
+            ← Applications
           </Link>
           <div className="mt-1 flex items-center gap-3">
             <h1 className="text-2xl font-semibold text-foreground">
@@ -131,7 +131,7 @@ export default async function ServiceLeadDetailPage({
         </Card>
       </div>
 
-      <DocumentVault serviceLeadId={lead.id} />
+      <DocumentVault applicationId={lead.id} />
     </div>
   );
 }

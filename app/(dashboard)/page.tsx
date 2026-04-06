@@ -80,14 +80,14 @@ export default async function DashboardPage({
             <div>
               <h2 className="text-lg font-medium tracking-tight mb-4 flex items-center gap-2">
                 <div className="h-2 w-2 rounded-full bg-primary" />
-                Service Lead Overview
+                Application Overview
               </h2>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 {[
-                  { label: 'Pending', value: stats.leadSummary.pending, href: '/service-leads?status=PENDING', color: 'bg-amber-500' },
-                  { label: 'Assigned', value: stats.leadSummary.assigned, href: '/service-leads?status=ASSIGNED', color: 'bg-blue-500' },
-                  { label: 'Completed', value: stats.leadSummary.completed, href: '/service-leads?status=COMPLETED', color: 'bg-emerald-500' },
-                  { label: 'Cancelled', value: stats.leadSummary.cancelled, href: '/service-leads?status=CANCELLED', color: 'bg-rose-500' },
+                  { label: 'Pending', value: stats.leadSummary.pending, href: '/applications?status=PENDING', color: 'bg-amber-500' },
+                  { label: 'Assigned', value: stats.leadSummary.assigned, href: '/applications?status=ASSIGNED', color: 'bg-blue-500' },
+                  { label: 'Completed', value: stats.leadSummary.completed, href: '/applications?status=COMPLETED', color: 'bg-emerald-500' },
+                  { label: 'Cancelled', value: stats.leadSummary.cancelled, href: '/applications?status=CANCELLED', color: 'bg-rose-500' },
                 ].map((item) => (
                   <Link key={item.label} href={item.href} className="block h-full group">
                     <div className="flex items-center justify-between rounded-xl border border-border/50 bg-card/30 p-4 hover:bg-card hover:border-border transition-all duration-300">
@@ -128,7 +128,7 @@ export default async function DashboardPage({
                   { label: 'Completed', value: stats.leadStageSummary.completed, stage: 'COMPLETED' },
                   { label: 'Lead Lost', value: stats.leadStageSummary.leadLost, stage: 'LEAD_LOST' },
                 ].map((item) => (
-                  <Link key={item.label} href={`/service-leads?stage=${item.stage}`} className="block h-full group">
+                  <Link key={item.label} href={`/applications?stage=${item.stage}`} className="block h-full group">
                     <div className="flex flex-col gap-2 rounded-xl border border-border/50 bg-card/20 p-4 hover:bg-card hover:border-border transition-all duration-300 h-full">
                       <span className="text-2xl font-light tracking-tight">{item.value ?? 0}</span>
                       <span className="text-[11px] uppercase tracking-wider font-medium text-muted-foreground/80 group-hover:text-muted-foreground transition-colors line-clamp-2 leading-tight">{item.label}</span>
