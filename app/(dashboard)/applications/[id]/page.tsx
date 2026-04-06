@@ -82,6 +82,7 @@ export default async function ApplicationDetailPage({
             <InfoRow label="Project Type" value={lead.projectType?.replace('_', ' ')} />
             <InfoRow label="Status" value={lead.status} />
             <InfoRow label="Assigned Field Agent" value={lead.fieldAgent?.name || 'Unassigned'} />
+            <InfoRow label="Assigned Team Lead" value={lead.teamLead?.name || 'Unassigned'} />
           </CardContent>
         </Card>
         

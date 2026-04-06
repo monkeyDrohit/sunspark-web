@@ -35,6 +35,8 @@ export default function NewApplicationPage() {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [discoms, setDiscoms] = useState<Discom[]>([]);
+  const [fieldAgents, setFieldAgents] = useState<any[]>([]);
+  const [teamLeads, setTeamLeads] = useState<any[]>([]);
 
   const [selectedVendorId, setSelectedVendorId] = useState<string>('');
 
@@ -64,6 +66,8 @@ export default function NewApplicationPage() {
   const [formData, setFormData] = useState({
     projectType: '',
     solarPanelId: '',
+    fieldAgentId: 'none',
+    teamLeadId: 'none',
     comments: '',
   });
 
@@ -110,17 +114,24 @@ export default function NewApplicationPage() {
         setCustomers([]);
         setProducts([]);
         setDiscoms([]);
+        setFieldAgents([]);
+        setTeamLeads([]);
         return;
       }
       try {
-        const [custRes, prodRes, discRes] = await Promise.all([
+        const token = localStorage.getItem('token');
+        const [custRes, prodRes, discRes, agentsRes, leadsRes] = await Promise.all([
           fetchCustomers({ status: 'ACTIVE', vendorId: selectedVendorId } as any),
           fetchProducts({ status: 'ACTIVE', vendorId: selectedVendorId } as any),
-          fetchDiscoms(selectedVendorId)
+          fetchDiscoms(selectedVendorId),
+          fetch(`${API_BASE}/users?role=FIELD_AGENT&vendorId=${selectedVendorId}`, { headers: { 'Authorization': `Bearer ${token}` } }).then(res => res.json()),
+          fetch(`${API_BASE}/users?role=SUB_ADMIN&vendorId=${selectedVendorId}`, { headers: { 'Authorization': `Bearer ${token}` } }).then(res => res.json())
         ]);
         setCustomers(custRes);
         setProducts(prodRes);
         setDiscoms(discRes);
+        setFieldAgents(Array.isArray(agentsRes) ? agentsRes : []);
+        setTeamLeads(Array.isArray(leadsRes) ? leadsRes : []);
         
         // If no customers, force 'isNewCustomer' to true
         if (custRes.length === 0) {
@@ -172,6 +183,8 @@ export default function NewApplicationPage() {
         vendorId: selectedVendorId,
         projectType: formData.projectType || undefined,
         solarPanelId: formData.solarPanelId === 'none' ? undefined : (formData.solarPanelId || undefined),
+        fieldAgentId: formData.fieldAgentId === 'none' ? undefined : formData.fieldAgentId,
+        teamLeadId: formData.teamLeadId === 'none' ? undefined : formData.teamLeadId,
         comments: formData.comments,
         // Provide dummy required fields for backend if they were removed from UI
         approvedCapacityKwp: '0', 
@@ -551,6 +564,43 @@ export default function NewApplicationPage() {
                       <SelectItem value="none">No Panel Assigned Yet</SelectItem>
                       {products.map(p => (
                         <SelectItem key={p.id} value={p.id}>{p.name} - {p.sku}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <Label>Assign Field Agent</Label>
+                  <Select 
+                    value={formData.fieldAgentId} 
+                    onValueChange={(val) => setFormData({...formData, fieldAgentId: val})}
+                    disabled={user?.role === 'FIELD_AGENT'}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Field Agent" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">-- Select Field Agent --</SelectItem>
+                      {fieldAgents.map(agent => (
+                        <SelectItem key={agent.id} value={agent.id}>{agent.name || agent.email}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <Label>Assign Team Lead (Sub Admin)</Label>
+                  <Select 
+                    value={formData.teamLeadId} 
+                    onValueChange={(val) => setFormData({...formData, teamLeadId: val})}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Team Lead" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">-- Select Team Lead --</SelectItem>
+                      {teamLeads.map(lead => (
+                        <SelectItem key={lead.id} value={lead.id}>{lead.name || lead.email}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>

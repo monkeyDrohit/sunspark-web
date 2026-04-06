@@ -60,6 +60,8 @@ export interface Application {
   customer?: { id: string; name: string; userId?: string };
   fieldAgentId?: string | null;
   fieldAgent?: { id: string; name: string };
+  teamLeadId?: string | null;
+  teamLead?: { id: string; name: string };
   projectType?: string;
   status: string;
   createdAt: string;

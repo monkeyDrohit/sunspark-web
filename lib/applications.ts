@@ -11,6 +11,8 @@ export interface Application {
   projectType: string | null;
   fieldAgentId: string | null;
   fieldAgent: { id: string; name: string; email: string } | null;
+  teamLeadId: string | null;
+  teamLead: { id: string; name: string; email: string } | null;
   agentStatus: string | null;
   status: string;
   stage: string | null;
