@@ -327,7 +327,7 @@ export function QuotationBuilder({ application }: { application: Application }) 
                 <p className="text-muted-foreground">{application.consumerPhone}</p>
               </div>
               <div className="text-xs text-muted-foreground">
-                {application.address || `${application.village}, ${application.district}, ${application.state} - ${application.pinCode}`}
+                {`${application.village || ''}, ${application.district || ''}, ${application.state || ''} - ${application.pinCode || ''}`}
               </div>
             </CardContent>
           </Card>

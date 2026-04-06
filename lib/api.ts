@@ -55,7 +55,9 @@ export interface Application {
   village: string | null;
   pinCode: string | null;
   stages: ApplicationStage[];
+  customerId?: string | null;
   customer?: { id: string; name: string };
+  fieldAgentId?: string | null;
   fieldAgent?: { id: string; name: string };
   projectType?: string;
   status: string;
