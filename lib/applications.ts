@@ -61,7 +61,7 @@ export async function fetchApplications(params?: {
     credentials: 'include',
     headers,
   });
-  if (!res.ok) throw new Error('Failed to fetch service leads');
+  if (!res.ok) throw new Error('Failed to fetch applications');
   return res.json();
 }
 
@@ -96,7 +96,7 @@ export async function updateApplication(id: string, data: Partial<Application>):
   
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.error || 'Failed to update service lead');
+    throw new Error(error.error || 'Failed to update application');
   }
   return res.json();
 }

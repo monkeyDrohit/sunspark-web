@@ -110,7 +110,7 @@ export function ApplicationsClient({
       <div className="p-6 md:p-8">
         <Card className="border-destructive/50">
           <CardHeader>
-            <CardTitle>Cannot load service leads</CardTitle>
+            <CardTitle>Cannot load applications</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground">{error}</p>
@@ -177,7 +177,7 @@ export function ApplicationsClient({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="ALL">All Stages</SelectItem>
-            <SelectItem value="SERVICE_LEAD">Service Lead</SelectItem>
+            <SelectItem value="SERVICE_LEAD">Application</SelectItem>
             <SelectItem value="QUOTATION">Quotation</SelectItem>
             <SelectItem value="DOCUMENTS_SUBMISSION">Documents Submission</SelectItem>
             <SelectItem value="APPLICATION_SUBMISSION">Application Submission</SelectItem>
@@ -194,7 +194,7 @@ export function ApplicationsClient({
       {initialData.length === 0 ? (
         <Card className="mt-6">
           <CardContent className="flex flex-col items-center justify-center py-12">
-            <p className="text-muted-foreground">No service leads yet.</p>
+            <p className="text-muted-foreground">No applications yet.</p>
           </CardContent>
         </Card>
       ) : (
@@ -276,7 +276,7 @@ export function ApplicationsClient({
               {filteredData.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={8} className="text-center py-6 text-muted-foreground">
-                    No matching service leads found.
+                    No matching applications found.
                   </TableCell>
                 </TableRow>
               )}

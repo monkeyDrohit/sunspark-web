@@ -76,7 +76,7 @@ export async function fetchApplications(vendorId?: string | null): Promise<Appli
     credentials: 'include',
     headers,
   });
-  if (!res.ok) throw new Error('Failed to fetch service leads');
+  if (!res.ok) throw new Error('Failed to fetch applications');
   return res.json();
 }
 
@@ -112,7 +112,7 @@ export async function updateApplicationStage(
   });
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.error || 'Failed to update service lead stage');
+    throw new Error(error.error || 'Failed to update application stage');
   }
   return res.json();
 }

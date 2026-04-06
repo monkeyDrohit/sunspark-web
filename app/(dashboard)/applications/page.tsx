@@ -17,7 +17,7 @@ export default async function ApplicationsPage({
   try {
     applications = await fetchApplications(vendorId);
   } catch (e) {
-    error = e instanceof Error ? e.message : "Failed to load service leads";
+    error = e instanceof Error ? e.message : "Failed to load applications";
   }
 
   return (

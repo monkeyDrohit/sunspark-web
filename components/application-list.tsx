@@ -72,7 +72,7 @@ export function ApplicationList({ leads: initialLeads, error }: ApplicationListP
     return (
       <Card>
         <CardContent className="flex flex-col items-center justify-center py-12">
-          <p className="text-muted-foreground">No service leads found.</p>
+          <p className="text-muted-foreground">No applications found.</p>
         </CardContent>
       </Card>
     );

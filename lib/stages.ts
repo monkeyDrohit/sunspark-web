@@ -14,7 +14,7 @@ export const STAGE_ORDER: StageSlug[] = [
 ];
 
 export const STAGE_LABELS: Record<StageSlug, string> = {
-  SERVICE_LEAD: 'Service Lead',
+  SERVICE_LEAD: 'Application',
   QUOTATION: 'Quotation',
   DOCUMENTS_SUBMISSION: 'Documents Submission',
   APPLICATION_SUBMISSION: 'Application Submission',
