@@ -347,43 +347,6 @@ export default function NewUserPage() {
                       </SelectContent>
                     </Select>
                   </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="fieldAgentId">Field Agent</Label>
-                    <Select
-                      value={formData.fieldAgentId}
-                      onValueChange={(val) => handleChange("fieldAgentId", val)}
-                      disabled={isFieldAgent}
-                    >
-                      <SelectTrigger id="fieldAgentId">
-                        <SelectValue placeholder="Select Field Agent" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="none">-- Select Field Agent --</SelectItem>
-                        {fieldAgents.map(agent => (
-                          <SelectItem key={agent.id} value={agent.id}>{agent.name || agent.email}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="teamLeadId">Team Lead (Sub Admin)</Label>
-                    <Select
-                      value={formData.teamLeadId}
-                      onValueChange={(val) => handleChange("teamLeadId", val)}
-                    >
-                      <SelectTrigger id="teamLeadId">
-                        <SelectValue placeholder="Select Team Lead" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="none">-- Select Team Lead --</SelectItem>
-                        {teamLeads.map(lead => (
-                          <SelectItem key={lead.id} value={lead.id}>{lead.name || lead.email}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
                 </>
               )}
 
