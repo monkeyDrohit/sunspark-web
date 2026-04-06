@@ -86,6 +86,7 @@ export function ApplicationList({ leads: initialLeads, error }: ApplicationListP
             <TableHead className="w-12">S.No.</TableHead>
             <TableHead>Application ID</TableHead>
             <TableHead>Customer Name</TableHead>
+            <TableHead>Field Agent</TableHead>
             <TableHead>Contact Number</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Stage</TableHead>
@@ -96,8 +97,29 @@ export function ApplicationList({ leads: initialLeads, error }: ApplicationListP
           {leads.map((lead, i) => (
             <TableRow key={lead.id}>
               <TableCell className="font-medium">{i + 1}</TableCell>
-              <TableCell className="font-mono text-sm">{lead.serviceId}</TableCell>
-              <TableCell>{lead.customerName}</TableCell>
+              <TableCell className="font-mono text-sm">
+                <Link href={`/applications/${lead.id}`} className="text-primary hover:underline">
+                  {lead.serviceId}
+                </Link>
+              </TableCell>
+              <TableCell>
+                {lead.consumerUserId ? (
+                  <Link href={`/users/${lead.consumerUserId}`} className="text-primary hover:underline font-medium">
+                    {lead.customerName}
+                  </Link>
+                ) : (
+                  lead.customerName
+                )}
+              </TableCell>
+              <TableCell>
+                {lead.fieldAgentId ? (
+                  <Link href={`/users/${lead.fieldAgentId}`} className="text-primary hover:underline">
+                    {lead.fieldAgent?.name || '—'}
+                  </Link>
+                ) : (
+                  '—'
+                )}
+              </TableCell>
               <TableCell>{lead.contactNumber}</TableCell>
               <TableCell>{getStatusBadge(lead.status)}</TableCell>
               <TableCell>
@@ -112,11 +134,6 @@ export function ApplicationList({ leads: initialLeads, error }: ApplicationListP
                   <Button variant="ghost" size="icon" asChild title="View">
                     <Link href={`/applications/${lead.id}`}>
                       <Eye className="h-4 w-4" />
-                    </Link>
-                  </Button>
-                  <Button variant="ghost" size="icon" asChild title="Edit">
-                    <Link href={`/applications/${lead.id}/edit`}>
-                      <Pencil className="h-4 w-4" />
                     </Link>
                   </Button>
                   <Button

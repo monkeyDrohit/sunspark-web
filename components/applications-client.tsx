@@ -218,8 +218,24 @@ export function ApplicationsClient({
                 return (
                   <TableRow key={lead.id}>
                     <TableCell className="font-mono text-sm">{lead.serviceId}</TableCell>
-                    <TableCell>{lead.customer?.name || lead.consumerName}</TableCell>
-                    <TableCell>{lead.fieldAgent?.name || '—'}</TableCell>
+                    <TableCell>
+                      {lead.consumerUserId ? (
+                        <Link href={`/users/${lead.consumerUserId}`} className="text-primary hover:underline font-medium">
+                          {lead.customer?.name || lead.consumerName}
+                        </Link>
+                      ) : (
+                        lead.customer?.name || lead.consumerName
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {lead.fieldAgentId ? (
+                        <Link href={`/users/${lead.fieldAgentId}`} className="text-primary hover:underline">
+                          {lead.fieldAgent?.name || '—'}
+                        </Link>
+                      ) : (
+                        '—'
+                      )}
+                    </TableCell>
                     <TableCell>{lead.projectType?.replace('_', ' ') || '—'}</TableCell>
                     <TableCell>{lead.approvedCapacityKwp} kWp</TableCell>
                     <TableCell>
@@ -233,11 +249,6 @@ export function ApplicationsClient({
                         <Button variant="ghost" size="icon" asChild title="View">
                           <Link href={`/applications/${lead.id}`}>
                             <Eye className="h-4 w-4" />
-                          </Link>
-                        </Button>
-                        <Button variant="ghost" size="icon" asChild title="Edit">
-                          <Link href={`/applications/${lead.id}/edit`}>
-                            <Pencil className="h-4 w-4" />
                           </Link>
                         </Button>
                         <Button

@@ -4,6 +4,7 @@ export interface Application {
   id: string;
   serviceId: string;
   customerId: string;
+  consumerUserId?: string | null;
   customerName: string;
   contactNumber: string;
   address: string | null;

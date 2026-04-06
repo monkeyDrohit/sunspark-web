@@ -56,7 +56,8 @@ export interface Application {
   pinCode: string | null;
   stages: ApplicationStage[];
   customerId?: string | null;
-  customer?: { id: string; name: string };
+  consumerUserId?: string | null;
+  customer?: { id: string; name: string; userId?: string };
   fieldAgentId?: string | null;
   fieldAgent?: { id: string; name: string };
   projectType?: string;
