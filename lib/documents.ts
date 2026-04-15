@@ -7,9 +7,10 @@ export interface Document {
   fileName: string;
   fileUrl: string;
   uploadedBy: string | null;
-  approved: boolean;
-  approvedBy: string | null;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  reviewedBy: string | null;
   score: number | null;
+  notes: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -38,6 +39,24 @@ export async function uploadDocument(applicationId: string, type: string, file: 
   if (!response.ok) {
     const error = await response.json();
     throw new Error(error.error || 'Failed to upload document');
+  }
+  return response.json();
+}
+
+export async function reviewDocument(
+  documentId: string,
+  data: { status: 'APPROVED' | 'REJECTED'; score?: number; notes?: string }
+): Promise<Document> {
+  const response = await fetch(`${API_BASE}/documents/${documentId}/review`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || 'Failed to review document');
   }
   return response.json();
 }

@@ -7,8 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { FileText, Upload, Trash2, ExternalLink, Loader2 } from 'lucide-react';
-import { fetchDocuments, uploadDocument, deleteDocument, Document } from '@/lib/documents';
+import { FileText, Upload, Trash2, ExternalLink, Loader2, Check, X } from 'lucide-react';
+import { fetchDocuments, uploadDocument, deleteDocument, reviewDocument, Document } from '@/lib/documents';
 import { useToast } from '@/hooks/use-toast';
 
 const DOCUMENT_TYPES = [
@@ -70,6 +70,23 @@ export function DocumentVault({ applicationId }: { applicationId: string }) {
       });
     } finally {
       setUploading(false);
+    }
+  }
+
+  async function handleReview(id: string, status: 'APPROVED' | 'REJECTED') {
+    try {
+      await reviewDocument(id, { status });
+      toast({
+        title: 'Success',
+        description: `Document ${status.toLowerCase()} successfully`,
+      });
+      loadDocuments();
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to review document',
+        variant: 'destructive',
+      });
     }
   }
 
@@ -176,13 +193,41 @@ export function DocumentVault({ applicationId }: { applicationId: string }) {
                           <Badge variant="secondary" className="text-[10px] h-4">
                             {doc.type.replace('_', ' ')}
                           </Badge>
+                          {doc.status && (
+                            <Badge variant={doc.status === 'APPROVED' ? 'default' : doc.status === 'REJECTED' ? 'destructive' : 'outline'} className="text-[10px] h-4 ml-2">
+                              {doc.status}
+                            </Badge>
+                          )}
                         </div>
                         <p className="text-[11px] text-muted-foreground mt-0.5">
                           Uploaded by {doc.uploadedBy} · {new Date(doc.createdAt).toLocaleDateString()}
+                          {doc.reviewedBy && ` · Reviewed by ${doc.reviewedBy}`}
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
+                      {doc.status === 'PENDING' && (
+                        <>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleReview(doc.id, 'APPROVED')}
+                            className="text-green-600 hover:text-green-700 hover:bg-green-50"
+                            title="Approve"
+                          >
+                            <Check className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleReview(doc.id, 'REJECTED')}
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                            title="Reject"
+                          >
+                            <X className="w-4 h-4" />
+                          </Button>
+                        </>
+                      )}
                       <Button
                         variant="ghost"
                         size="icon"
