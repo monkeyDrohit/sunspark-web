@@ -59,7 +59,6 @@ export default async function ProductsPage() {
                 <TableHead className="w-12">S.No.</TableHead>
                 <TableHead className="w-20">Image</TableHead>
                 <TableHead>Name</TableHead>
-                <TableHead>Brand</TableHead>
                 <TableHead>Category</TableHead>
                 <TableHead>Price</TableHead>
                 <TableHead>Stock</TableHead>
@@ -86,7 +85,6 @@ export default async function ProductsPage() {
                     )}
                   </TableCell>
                   <TableCell className="font-medium">{product.name}</TableCell>
-                  <TableCell>{product.brand.name}</TableCell>
                   <TableCell>{product.category.name}</TableCell>
                   <TableCell>
                     ₹{parseFloat(product.amount).toLocaleString('en-IN')}

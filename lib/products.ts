@@ -6,8 +6,6 @@ export interface Product {
   id: string;
   name: string;
   slug: string;
-  brandId: string;
-  brand: { id: string; name: string };
   categoryId: string;
   category: { id: string; name: string };
   sku: string;
@@ -27,7 +25,6 @@ export interface Product {
 
 export async function fetchProducts(params?: {
   name?: string;
-  brandId?: string;
   categoryId?: string;
   status?: string;
   vendorId?: string | null;

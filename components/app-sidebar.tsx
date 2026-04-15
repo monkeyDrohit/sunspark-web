@@ -44,23 +44,8 @@ const navItems = [
   },
   { href: '/track-agents', label: 'Track Agents', icon: MapPin, roles: ['SYSTEM_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'] },
   { href: '/applications', label: 'Applications', icon: FileText, roles: ['SYSTEM_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN', 'FIELD_AGENT', 'CUSTOMER'] },
-  { href: '/brands', label: 'Brands', icon: Tag, roles: ['SYSTEM_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'] },
   { href: '/categories', label: 'Category', icon: Grid3x3, roles: ['SYSTEM_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'] },
   { href: '/products', label: 'Products', icon: Package, roles: ['SYSTEM_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'] },
-  { href: '/orders', label: 'Orders', icon: ShoppingCart, roles: ['SYSTEM_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN', 'FIELD_AGENT', 'CUSTOMER'] },
-  {
-    href: '/cms',
-    label: 'CMS',
-    icon: Settings,
-    roles: ['SYSTEM_ADMIN', 'SUPER_ADMIN'],
-    children: [
-      { href: '/cms/pages', label: 'Pages' },
-      { href: '/cms/faq', label: 'FAQ' },
-      { href: '/cms/banners', label: 'Banners' },
-      { href: '/cms/top-banners', label: 'Top Banners' },
-    ],
-  },
-  { href: '/cancel-reasons', label: 'Reasons', icon: XCircle, roles: ['SYSTEM_ADMIN', 'SUPER_ADMIN', 'SUB_ADMIN'] },
 ];
 
 export function AppSidebar() {

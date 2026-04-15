@@ -18,16 +18,13 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { createProduct } from '@/lib/products';
-import { fetchBrands, Brand } from '@/lib/brands';
 import { fetchCategories, Category } from '@/lib/categories';
 
 export default function NewProductPage() {
   const router = useRouter();
-  const [brands, setBrands] = useState<Brand[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   
   const [name, setName] = useState('');
-  const [brandId, setBrandId] = useState('');
   const [categoryId, setCategoryId] = useState('');
   const [sku, setSku] = useState('');
   const [amount, setAmount] = useState('');
@@ -43,15 +40,11 @@ export default function NewProductPage() {
   useEffect(() => {
     async function loadData() {
       try {
-        const [loadedBrands, loadedCategories] = await Promise.all([
-          fetchBrands(),
-          fetchCategories()
-        ]);
-        setBrands(loadedBrands);
+        const loadedCategories = await fetchCategories();
         setCategories(loadedCategories);
       } catch (err) {
         console.error(err);
-        setError('Failed to load brands or categories.');
+        setError('Failed to load categories.');
       } finally {
         setFetchingData(false);
       }
@@ -65,13 +58,12 @@ export default function NewProductPage() {
     setLoading(true);
 
     try {
-      if (!brandId || !categoryId) {
-        throw new Error('Brand and Category are required');
+      if (!categoryId) {
+        throw new Error('Category is required');
       }
 
       await createProduct({
         name,
-        brandId,
         categoryId,
         sku,
         amount: amount,
@@ -150,21 +142,6 @@ export default function NewProductPage() {
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="brand">Brand *</Label>
-                <Select value={brandId} onValueChange={setBrandId} disabled={loading} required>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select Brand" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {brands.map((brand) => (
-                      <SelectItem key={brand.id} value={brand.id}>
-                        {brand.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
               <div className="space-y-2">
                 <Label htmlFor="category">Category *</Label>
                 <Select value={categoryId} onValueChange={setCategoryId} disabled={loading} required>

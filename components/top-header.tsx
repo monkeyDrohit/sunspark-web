@@ -22,7 +22,6 @@ const mainNav = [
   { href: '/products', label: 'Products' },
   { href: '/applications', label: 'Applications' },
   { href: '/quotations', label: 'Quotations' },
-  { href: '/orders', label: 'Orders' },
 ];
 
 export function TopHeader() {
