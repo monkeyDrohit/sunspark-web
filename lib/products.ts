@@ -61,3 +61,22 @@ export async function fetchProduct(id: string): Promise<Product | null> {
   if (!res.ok) return null;
   return res.json();
 }
+
+export async function createProduct(data: Partial<Product> & { vendorId?: string | null }): Promise<Product> {
+  const headers = await getAuthHeaders();
+  headers['Content-Type'] = 'application/json';
+  
+  const res = await fetch(`${API_BASE}/products`, {
+    method: 'POST',
+    credentials: 'include',
+    headers,
+    body: JSON.stringify(data),
+  });
+  
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.error || 'Failed to create product');
+  }
+  
+  return res.json();
+}
