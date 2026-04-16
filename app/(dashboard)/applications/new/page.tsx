@@ -289,16 +289,20 @@ export default function NewApplicationPage() {
                 <CardDescription>Select an existing customer or register a new one.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex items-center space-x-2 pb-4">
+                <div 
+                  className={`flex items-center space-x-2 pb-4 ${customers.length === 0 ? 'cursor-not-allowed opacity-70' : 'cursor-pointer'}`}
+                  onClick={() => {
+                    if (customers.length > 0) setIsNewCustomer(!isNewCustomer);
+                  }}
+                >
                   <Checkbox 
                     id="isNewCustomer" 
                     checked={isNewCustomer} 
-                    onCheckedChange={(checked) => setIsNewCustomer(!!checked)} 
-                    disabled={customers.length === 0} // Force checked if no customers
+                    disabled={customers.length === 0} 
                   />
                   <label
-                    htmlFor="isNewCustomer"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    className="text-sm font-medium leading-none cursor-pointer"
+                    onClick={(e) => e.preventDefault()} // Prevent double toggle
                   >
                     Create a New Customer
                   </label>
