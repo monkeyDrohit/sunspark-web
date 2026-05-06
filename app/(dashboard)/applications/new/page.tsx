@@ -136,6 +136,8 @@ export default function NewApplicationPage() {
         // If no customers, force 'isNewCustomer' to true
         if (custRes.length === 0) {
           setIsNewCustomer(true);
+        } else if (custRes.length > 0) {
+          setSelectedCustomerId(custRes[0].id);
         }
       } catch (err) {
         console.error('Failed to load vendor specific reference data', err);
@@ -291,18 +293,18 @@ export default function NewApplicationPage() {
               <CardContent className="space-y-4">
                 <div 
                   className={`flex items-center space-x-2 pb-4 ${customers.length === 0 ? 'cursor-not-allowed opacity-70' : 'cursor-pointer'}`}
-                  onClick={() => {
-                    if (customers.length > 0) setIsNewCustomer(!isNewCustomer);
-                  }}
                 >
                   <Checkbox 
                     id="isNewCustomer" 
                     checked={isNewCustomer} 
                     disabled={customers.length === 0} 
+                    onCheckedChange={(checked) => {
+                      if (customers.length > 0) setIsNewCustomer(!!checked);
+                    }}
                   />
                   <label
+                    htmlFor="isNewCustomer"
                     className="text-sm font-medium leading-none cursor-pointer"
-                    onClick={(e) => e.preventDefault()} // Prevent double toggle
                   >
                     Create a New Customer
                   </label>
